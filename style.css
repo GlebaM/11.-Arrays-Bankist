@@ -19,7 +19,7 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #444;
   background-color: #f3f3f3;
-  height: 100vh;
+  /* height: 100vh; */
   padding: 2rem;
 }
 
@@ -41,6 +41,7 @@ nav {
 
 .login {
   display: flex;
+  gap: 2rem;
 }
 
 .login__input {
@@ -51,7 +52,7 @@ nav {
   text-align: center;
   width: 12rem;
   border-radius: 10rem;
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
   color: inherit;
   border: 1px solid #fff;
   transition: all 0.3s;
@@ -74,6 +75,9 @@ nav {
   cursor: pointer;
   transition: all 0.3s;
 }
+/* .login__btn--out.hide {
+  display: none;
+} */
 
 .login__btn:hover,
 .login__btn:focus,
@@ -94,7 +98,7 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0; */
+  opacity: 0;
   transition: all 1s;
 }
 
