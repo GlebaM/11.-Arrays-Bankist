@@ -3,6 +3,36 @@
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+// Data
+// const account1 = {
+//   owner: 'Jonas Schmedtmann',
+//   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+//   interestRate: 1.2, // %
+//   pin: 1111,
+// };
+
+// const account2 = {
+//   owner: 'Jessica Davis',
+//   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+//   interestRate: 1.5,
+//   pin: 2222,
+// };
+
+// const account3 = {
+//   owner: 'Steven Thomas Williams',
+//   movements: [200, -200, 340, -300, -20, 50, 400, -460],
+//   interestRate: 0.7,
+//   pin: 3333,
+// };
+
+// const account4 = {
+//   owner: 'Sarah Smith',
+//   movements: [430, 1000, 700, 50, 90],
+//   interestRate: 1,
+//   pin: 4444,
+// };
+
+// const accounts = [account1, account2, account3, account4];
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const eurToUsd = 1.1;
 // const currencies = new Map([
@@ -276,15 +306,21 @@ GOOD LUCK 😀
 // for (const mov of movements) balance2 += mov;
 // console.log(balance2);
 
-// //Reduce - max value
+//Reduce - max value
 // const maxValue = function (acc) {
 //   return acc.reduce((acc, mov) => (acc < mov ? mov : acc), acc[0]);
 // };
-// // console.log(maxValue(movements));
+// console.log(maxValue(movements));
 
-// ////////////////////////////////////////
-// //CHAINING METHODS - lesson
-// //PIPELINE
+//Reduce - evaluate max value
+// console.log(maxValue(movements));
+// console.log(maxValue(account2.movements));
+// console.log(maxValue(account3.movements));
+// console.log(maxValue(account4.movements));
+
+////////////////////////////////////////
+//CHAINING METHODS - lesson
+//PIPELINE
 // const usdToEur = 0.84;
 // const totalDepositsUSD = movements
 //   .filter(mov => mov > 0)
@@ -295,6 +331,14 @@ GOOD LUCK 😀
 //   // })
 //   .reduce((acc, mov) => acc + mov, 0);
 // console.log(totalDepositsUSD.toFixed(2));
+
+///////////////////////////////////////
+//FIND()
+// const firstWithdrawal = movements.find(mov => mov < 0);
+// // console.log(movements);
+// // console.log(firstWithdrawal);
+// const account = accounts.find(acc => acc.userName === 'jd');
+// console.log(account);
 
 ////////////////////////////////////////////////////
 // DOM  - MANIPULATION
@@ -332,11 +376,6 @@ const account4 = {
 };
 
 const accounts = [account1, account2, account3, account4];
-//Reduce - evaluate max value
-// console.log(maxValue(movements));
-// console.log(maxValue(account2.movements));
-// console.log(maxValue(account3.movements));
-// console.log(maxValue(account4.movements));
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -350,8 +389,8 @@ const labelTimer = document.querySelector('.timer');
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 
-const btnLogin = document.querySelector('.login__btn--in');
-const btnLogout = document.querySelector('.login__btn--out');
+const btnLogin = document.querySelector('.login__btn');
+const btnLogout = document.querySelector('.login__logout');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
@@ -365,6 +404,8 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//// METHODS
+//Display methods
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements?.forEach((mov, i) => {
@@ -381,7 +422,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-// displayMovements(account1.movements);
 
 //Calculate and Display balance
 const calcDisplayBallance = function (acc) {
@@ -392,8 +432,6 @@ const calcDisplayBallance = function (acc) {
   typeof acc.balance;
   labelBalance.textContent = `${acc.balance} €`;
 };
-// calcDisplayBallance(account1.movements);
-// console.log(accounts);
 
 //Calculate and Display summary
 const calcDisplaySummary = function (movements) {
@@ -429,9 +467,10 @@ const calcDisplaySummary = function (movements) {
     }, 0);
   labelSumInterest.textContent = interests.toFixed(2) + '€';
 };
-// calcDisplaySummary(account1.movements);
+//// METHODS
+// Utility/complementary methods
 
-//Computing usernames with map/ and others array methods
+//Computing usernames using map/ and others array methods
 const createUsernames = function (accs) {
   accs.forEach(acc => {
     acc.userName = acc.owner
@@ -442,27 +481,33 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
-// console.log(accounts);
 
-///////////////////////////////////////
-//FIND()
-// const firstWithdrawal = movements.find(mov => mov < 0);
-// // console.log(movements);
-// // console.log(firstWithdrawal);
-// const account = accounts.find(acc => acc.userName === 'jd');
-// console.log(account);
+// Method returns account we look for using obj.userName value
+const findAccount = function (value) {
+  return accounts.find(acc => acc.userName === value);
+};
+
+// Method reseting summary, balance and few more
+const resetAfterLogout = function () {
+  containerApp.style.opacity = 0;
+  labelWelcome.textContent = `Log in to get started`;
+  currentAccount = '';
+  containerMovements.innerHTML = '';
+  btnLogout.classList.add('hide');
+  labelBalance.textContent = `0000 €`;
+  labelSumIn.textContent = '0000€';
+  labelSumOut.textContent = `0000€`;
+  labelSumInterest.textContent = '0000€';
+};
 
 //////////////////////////////////////
 //LOGIN APPLICATION
 ///////////////////////////////////////////////////////////////
 /// DISPLAYING REAL APP
-// It stores current account
+// 'let currentAccount' stores current account
 let currentAccount;
-// Method returns account we look for
-const findAccount = function (value) {
-  return accounts.find(acc => acc.userName === value);
-};
-//Reftesh page method
+
+// DISPLAY ALL VALUES ON SCREEN
 const updateUI = function (currAcc) {
   //Display movements
   displayMovements(currAcc.movements);
@@ -472,13 +517,15 @@ const updateUI = function (currAcc) {
   calcDisplaySummary(currAcc.movements);
 };
 
-// Log in function - main
+///////////////////////////////////////////
+//EVENT HANDLERS
+// LOG IN - when 'btnLogin' clicked
 const logIn = function (e) {
   e.preventDefault();
 
   //Find and update currentAccount
   currentAccount = findAccount(inputLoginUsername.value);
-  console.log(currentAccount);
+  // console.log(currentAccount);
 
   //If currentAcc is undefined or null nothing will happened
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
@@ -491,12 +538,12 @@ const logIn = function (e) {
     inputLoginPin.value = inputLoginUsername.value = '';
     inputLoginPin.blur();
     updateUI(currentAccount);
+    btnLogout.classList.remove('hide');
   }
-  // btnLogout.classList.remove('.hide');
 };
 btnLogin.addEventListener('click', logIn);
 
-/// TRANSFER MONEY FROM USER TO RECIPIENT
+/// TRANSFER MONEY FROM USER TO RECIPIENT - when 'btnTransfer' clicked
 const transferAction = function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
@@ -519,10 +566,10 @@ const transferAction = function (e) {
 
   //Display page values
   updateUI(currentAccount);
-  console.log('ukjsfyg');
 };
 btnTransfer.addEventListener('click', transferAction);
 
+// LOAN REQUEST when 'btnLoan' clicked
 const loanRequest = function (e) {
   e.preventDefault();
   //Clear input fields
@@ -535,7 +582,6 @@ const loanRequest = function (e) {
     setTimeout(function () {
       // Adding loan amount to current account array
       currentAccount.movements.push(amount);
-      console.log(currentAccount);
       //Set input value to empty
       inputLoanAmount.value = '';
       //Display page values
@@ -545,40 +591,30 @@ const loanRequest = function (e) {
 };
 btnLoan.addEventListener('click', loanRequest);
 
-///// LOG OUT
-// const closeAccount = function (e) {
-//   // e.preventDefault();
-//   containerApp.style.opacity = 0;
-//   labelWelcome.textContent = `Log in to get started`;
-//   currentAccount = '';
-//   containerMovements.innerHTML = '';
-//   labelBalance.textContent = `0000 €`;
-//   labelSumIn.textContent = '0000€';
-//   labelSumOut.textContent = `0000€`;
-//   labelSumInterest.textContent = '0000€';
-// };
-// btnLogout.addEventListener('click', closeAccount);
+// LOG OUT - when 'btnLogout' clicked
+const logout = function (e) {
+  e.preventDefault();
+  if (currentAccount?.userName) {
+    // Method reseting summary, balance and few more
+    resetAfterLogout();
+  }
+};
+btnLogout.addEventListener('click', logout);
 
-// CLOSE
-// const closeAccount = function (e) {
-//   e.preventDefault();
-//   // const userInput = inputCloseUsername.value;
-//   // const pinInput = Number(inputClosePin.value);
-//   if (
-//     currentAccount?.userName &&
-//     inputCloseUsername.value === currentAccount.userName &&
-//     Number(inputClosePin.value) === currentAccount.pin
-//   ) {
-//     containerApp.style.opacity = 0;
-//     labelWelcome.textContent = `Log in to get started`;
-//     currentAccount = '';
-//     containerMovements.innerHTML = '';
-//     labelBalance.textContent = `0000 €`;
-//     labelSumIn.textContent = '0000€';
-//     labelSumOut.textContent = `0000€`;
-//     labelSumInterest.textContent = '0000€';
-
-//     inputCloseUsername.value = inputClosePin.value = '';
-//   }
-// };
-// btnLogout.addEventListener('click', closeAccount);
+// CLOSE ACCOUNT - when 'btnClose' clicked
+const closeAccount = function (e) {
+  e.preventDefault();
+  if (
+    // currentAccount?.userName &&
+    inputCloseUsername.value === currentAccount.userName &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(acc => acc === currentAccount);
+    // Delete account
+    accounts.splice(index, 1);
+    // Method reseting summary, balance and few more
+    resetAfterLogout();
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+};
+btnClose.addEventListener('click', closeAccount);
